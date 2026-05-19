@@ -2,7 +2,13 @@ import 'dart:io';
 import 'product.dart';
 
 class ProductManager {
-  static List<Product> products = [];
+  static List<Product> products = [
+    Product(1, "Laptop", "laptop.png", 1500),
+    Product(2, "IPhone", "iphone.png", 1200),
+    Product(3, "Tablet", "tablet.png", 800),
+    Product(4, "Mouse", "mouse.png", 50),
+    Product(5, "Keyboard", "keyboard.png", 100),
+  ];
 
   // Thêm sản phẩm
   void addProduct() {
