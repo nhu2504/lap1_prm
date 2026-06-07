@@ -1,60 +1,90 @@
+import 'package:nhu/Views/Pages/AboutPage.dart';
 import 'package:flutter/material.dart';
-import 'package:nhu/Views/Widget/Product_Widget.dart';
+import 'package:nhu/Views/Widget/ProductWidget.dart';
 
-class Homepage extends StatelessWidget{
+class Homepage extends StatefulWidget {
   const Homepage({super.key});
+
+  @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage>
+    with SingleTickerProviderStateMixin {
+  int _selectedIndex = 0;
+  late TabController _tabController;
+
+  AboutOnPress(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AboutPage()),
+    );
+  }
+
   void onPress() {}
+
+  @override
+  void initState() {
+    super.initState();
+
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home Page"),
-        backgroundColor: Colors.amberAccent[100],
-        leading: IconButton(
-          onPressed: onPress,
-          icon: Icon(Icons.menu),
+        backgroundColor: Colors.pink[100],
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(icon: Icon(Icons.home), text: "Products"),
+            Tab(icon: Icon(Icons.person), text: "About"),
+            Tab(icon: Icon(Icons.info), text: "Detail"),
+          ],
         ),
-        actions: [
-          IconButton(
-            onPressed: onPress,
-            icon: Icon(Icons.search),
-          ),
-          IconButton(
-            onPressed: onPress,
-            icon: Icon(Icons.store),
-          ),
-          IconButton(
-            onPressed: onPress,
-            icon: Icon(Icons.music_note),
-          ),
-        ],
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/about');
+          },
+          icon: const Icon(Icons.account_box_outlined),
+        ),
+        actions: [IconButton(onPressed: onPress, icon: Icon(Icons.search))],
       ),
-      // body: Column(
-      //   children: [
-      //     Image.asset(
-      //       "assets/images/nhu.jpg",
-      //       height: 200,
-      //       fit: BoxFit.cover,
-      //     ),
+      // body: Container(
+      //   height: MediaQuery.of(context).size.height,
+      //   width: double.infinity,
+      //   child: Image.asset("assets/images/nhu.jpg", fit: BoxFit.contain,),
       //
-      //     ProductWidget(),
-      //   ],
       // ),
-      body: ProductWidget(),
-
+      body: [
+        ProductListWidget(),
+        Center(child: Text("About")),
+        Center(child: Text("Detail product")),
+      ][_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
         items: [
+          BottomNavigationBarItem(label: "Home", icon: Icon(Icons.home)),
           BottomNavigationBarItem(
-            label: "Home",
-            icon: Icon(Icons.home),
+            label: "About",
+            icon: Icon(Icons.account_box_outlined, color: Colors.purple),
           ),
           BottomNavigationBarItem(
-            label: "Settings",
-            icon: Icon(Icons.settings, color: Colors.blueAccent,),
-          ),
-          BottomNavigationBarItem(
-            label: "Favorite",
-            icon: Icon(Icons.favorite, color: Colors.pink,),
+            label: "Detail product",
+            icon: Icon(Icons.details, color: Colors.pink),
           ),
         ],
       ),
@@ -69,7 +99,7 @@ class Homepage extends StatelessWidget{
       //       ),
       //       children: [
       //         TextSpan(
-      //           text: "World ",
+      //           text: "Phuoc ",
       //           style: TextStyle(
       //             color: Colors.blue,
       //             fontSize: 20,
